@@ -1,0 +1,5 @@
+.tern-*
+*~
+*.swp
+.idea
+*.iml
