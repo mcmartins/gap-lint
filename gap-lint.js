@@ -18,7 +18,7 @@ var GapLint = (function GAPLint() {
       return self.when.regex.exec(text)
     };
 
-    this.comply = function (text) {
+    this.validate = function (text) {
       if (self.then[0] && !self.then[0].dontCheck && self.then[0].regex.exec(text)) {
         text = text.match(self.then[0].regex)[1];
         self.then.splice(0, 1);
@@ -84,7 +84,7 @@ var GapLint = (function GAPLint() {
     ];
   }
 
-  self.comply = function validate(text) {
+  self.validate = function validate(text) {
     if (!text) return [];
     // results array
     var flags = [];
@@ -109,7 +109,7 @@ var GapLint = (function GAPLint() {
         var nextFlag = flags.pop();
         var unMatchedFlags = [];
         while (nextFlag && text) {
-          text = nextFlag.rule.comply(text);
+          text = nextFlag.rule.validate(text);
           if (text) {
             if (!nextFlag.rule.isCompliant()) unMatchedFlags.unshift(nextFlag);
             // FIXME this causes an error when the code is all in the same line and the previous rule needs to be checked for compliance more than once
