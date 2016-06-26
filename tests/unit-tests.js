@@ -43,16 +43,17 @@ QUnit.test('For statement', function (assert) {
 });
 
 QUnit.test('Chunk of code', function (assert) {
-  var text = '# Literals\n1234\n.123\n7\n2147483647\n(1,2,3)(4,5,6)\n\n"String literals"\n\n"""\nMultiline\nstring\nliterals\n"""\n9123really\w\ eir\_\(identifier := 5;\n\n\nf := function(a,b,c)\n\nlocal x,y,z,g;\n\nreturn x;\nend;';
-  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
-});
-
-QUnit.test('Chunk of code', function (assert) {
   var text = '# Literals\n1234\n.123\n7\n2147483647\n(1,2,3)(4,5,6)\n\n"String literals"\n\n"""\nMultiline\nstring\nliterals\n"""\n9123really\w\ eir\_\(identifier := 5;\n\n\nf := function(a,b,c)\n\n local x,y,z,g\n\nreturn x;\nend;';
   var results = window.GapLint.validate(text);
-  assert.ok(results.length == 1, 'Testing text: ' + text + ' - should return 0 results.');
+  assert.ok(results.length == 1, 'Testing text: ' + text + ' - should return 1 results.');
   assert.ok(results[0].rule.severity == 'warning', 'Testing text: ' + text + ' - should return severity warning.');
   assert.ok(results[0].line == 19, 'Testing text: ' + text + ' - should return line 19.');
   assert.ok(results[0].column == 1, 'Testing text: ' + text + ' - should return column 1.');
   assert.ok(results[0].message == 'Missing semicolon.', 'Testing text: ' + text + ' - should return message Missing semicolon.');
 });
+
+QUnit.test('Chunk of code', function (assert) {
+  var text = '# Literals\n1234\n.123\n7\n2147483647\n(1,2,3)(4,5,6)\n\n"String literals"\n\n"""\nMultiline\nstring\nliterals\n"""\n9123really\w\ eir\_\(identifier := 5;\n\n\nf := function(a,b,c)\n\nlocal x,y,z,g;\n\nreturn x;\nend;';
+  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+});
+

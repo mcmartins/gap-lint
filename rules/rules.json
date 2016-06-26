@@ -1,0 +1,192 @@
+{
+  "rules": [
+    {
+      "name": "IF_STMT",
+      "severity": "error",
+      "message": "Missing {then}.",
+      "when": {
+        "regex": "\\bif\\b"
+      },
+      "then": [
+        {
+          "regex": "\\bthen\\b(.*)",
+          "inline": true
+        },
+        {
+          "regex": "\\bfi;(.*)",
+          "inline": false
+        }
+      ]
+    },
+    {
+      "name": "IF_STMT_ELIF",
+      "severity": "error",
+      "message": "Missing {then}.",
+      "when": {
+        "regex": "\\belif\\b"
+      },
+      "then": [
+        {
+          "regex": "\\bthen\\b(.*)",
+          "inline": true
+        }
+      ]
+    },
+    {
+      "name": "WHILE_STMT",
+      "severity": "error",
+      "message": "Missing {then}.",
+      "when": {
+        "regex": "\\bwhile\\b"
+      },
+      "then": [
+        {
+          "regex": "\\bdo(.*)",
+          "inline": false
+        },
+        {
+          "regex": "\\bod;(.*)",
+          "inline": false
+        }
+      ]
+    },
+    {
+      "name": "FOR_STMT",
+      "severity": "error",
+      "message": "Missing {then}.",
+      "when": {
+        "regex": "\\bfor\\b"
+      },
+      "then": [
+        {
+          "regex": "\\bdo(.*)",
+          "inline": false
+        },
+        {
+          "regex": "\\bod;(.*)",
+          "inline": false
+        }
+      ]
+    },
+    {
+      "name": "ATOMIC_STMT",
+      "severity": "error",
+      "message": "Missing {then}.",
+      "when": {
+        "regex": "\\batomic\\b"
+      },
+      "then": [
+        {
+          "regex": "\\bdo(.*)",
+          "inline": false
+        },
+        {
+          "regex": "\\bod;(.*)",
+          "inline": false
+        }
+      ]
+    },
+    {
+      "name": "REPEAT_STMT",
+      "severity": "error",
+      "message": "Missing {then}.",
+      "when": {
+        "regex": "\\brepeat\\b"
+      },
+      "then": [
+        {
+          "regex": "\\buntil(.*)",
+          "inline": false
+        }
+      ]
+    },
+    {
+      "name": "FUNCTION",
+      "severity": "warning",
+      "Message": "Missing return in the function. Are you sure you didn't forget?",
+      "when": {
+        "regex": "\\bfunction\\b"
+      },
+      "then": [
+        {
+          "regex": "\\breturn(.*)",
+          "inline": false
+        },
+        {
+          "regex": "\\bend;(.*)",
+          "inline": false
+        }
+      ]
+    },
+    {
+      "name": "FUNCTION_SIGN",
+      "severity": "error",
+      "message": "Something is wrong with the function signature.",
+      "when": {
+        "regex": "\\bfunction\\b"
+      },
+      "then": [
+        {
+          "regex": "\\(.*\\)(.*)",
+          "inline": true
+        }
+      ]
+    },
+    {
+      "name": "TAB",
+      "severity": "warning",
+      "message": "Please use spaces instead of tabs.",
+      "when": {
+        "regex": "\\t"
+      },
+      "then": [
+        {
+          "regex": "\\/",
+          "inline": false
+        }
+      ]
+    },
+    {
+      "name": "LOCAL",
+      "severity": "warning",
+      "message": "Missing semicolon.",
+      "when": {
+        "regex": "\\blocal\\b"
+      },
+      "then": [
+        {
+          "regex": "(.*);",
+          "inline": true
+        }
+      ]
+    },
+    {
+      "name": "RETURN",
+      "severity": "warning",
+      "message": "Missing semicolon.",
+      "when": {
+        "regex": "\\breturn\\b/}",
+        "then": [
+          {
+            "regex": "(.*);",
+            "inline": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "VAR_ASSIGN",
+      "severity": "warning",
+      "message": "Missing semicolon.",
+      "when": {
+        "regex": "\\b.*:=.(?!function).*\\b"
+      },
+      "then": [
+        {
+          "regex": "(.*);",
+          "inline": true
+        }
+      ]
+    }
+  ]
+}

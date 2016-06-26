@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "GAP Lint Rules JSON schema.",
+  "description": "This document describes the rules used by GAP Lint",
+  "properties": {
+    "rules": {
+      "type": "array",
+      "uniqueItems": false,
+      "title": "Rules",
+      "description": "An array of Rules.",
+      "items": {
+        "type": "object",
+        "title": "Rule",
+        "description": "A Rule is  one of a set of explicit or understood regulations or principles governing conduct or procedure within a particular area of activity, in this case the GAP Language.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name",
+            "description": "The name of the Rule."
+          },
+          "severity": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Severity",
+            "description": "The type of severity for the current rule. One of: error, warning."
+          },
+          "when": {
+            "type": "object",
+            "title": "When",
+            "description": "Here you must specify the trigger for this rule.",
+            "properties": {
+              "regex": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Regex",
+                "description": "The regular expression that will trigger the current rule."
+              }
+            },
+            "required": [
+              "regex"
+            ]
+          },
+          "then": {
+            "type": "array",
+            "uniqueItems": false,
+            "title": "Then",
+            "description": "When this rule is triggered, a set of other instructions must be present.",
+            "items": {
+              "type": "object",
+              "title": "Instruction",
+              "description": "An Instruction is basically the instruction that must follow the trigger.",
+              "properties": {
+                "regex": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Regex",
+                  "description": "The Instruction regular expression that must exist follow the trigger."
+                },
+                "inline": {
+                  "type": "boolean",
+                  "title": "Inline",
+                  "description": "If this Instruction must follow in the same line of the trigger, then set it to true, otherwise false."
+                }
+              },
+              "required": [
+                "regex",
+                "inline"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "severity",
+          "when",
+          "then"
+        ]
+      }
+    }
+  },
+  "required": [
+    "rules"
+  ]
+}

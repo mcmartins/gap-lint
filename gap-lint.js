@@ -1,29 +1,53 @@
 var GapLint = (function GAPLint() {
-  "use strict";
+  'use strict';
 
   var self = {};
+  var loadedRules = [];
 
-  // TODO is it worth to add register and unregister methods for adding removing Rules externally?
+  var loadJsonFromUrl = function (url) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function () {
+      var status = xhr.status;
+      if (status == 200) {
+        loadedRules = loadedRules.concat(xhr.response.rules);
+      } else {
+        throw new Error('Could not load the resource from ' + url + '. HTML Status Code is ' + status);
+      }
+    };
+    xhr.send();
+  };
 
-  var Rule = function (name, when, then, severity, message) {
-    this.name = name;
-    this.when = when;
-    this.then = then;
-    this.severity = severity;
-    this.message = message;
+  loadJsonFromUrl("https://mcmartins.github.io/gap-lint/rules/rules.json");
+
+  function getRules() {
+    var res = [];
+    loadedRules.forEach(function each(rule) {
+      res.push(new Rule(rule));
+    });
+    return res;
+  }
+
+  var Rule = function Rule(rule) {
+    this.name = rule.name;
+    this.when = rule.when;
+    this.then = rule.then;
+    this.severity = rule.severity;
+    this.message = rule.message;
 
     var self = this;
 
     this.getMatches = function (text) {
-      return self.when.regex.exec(text)
+      return new RegExp(self.when.regex, "m").exec(text)
     };
 
-    this.validate = function (text) {
-      if (self.then[0] && !self.then[0].dontCheck && self.then[0].regex.exec(text)) {
-        text = text.match(self.then[0].regex)[1];
+    this.comply = function (text) {
+      if (self.then[0] && !self.then[0].checkOnce && new RegExp(self.then[0].regex, "m").exec(text)) {
+        text = text.match(new RegExp(self.then[0].regex, "m"))[1];
         self.then.splice(0, 1);
-      } else if (self.then[0].inline) {
-        self.then[0].dontCheck = true;
+      } else if (self.then[0] && self.then[0].inline) {
+        self.then[0].checkOnce = true;
       }
       return text;
     };
@@ -41,7 +65,7 @@ var GapLint = (function GAPLint() {
     }
   };
 
-  var Flag = function (line, string, rule) {
+  var Flag = function Flag(line, string, rule) {
     this.rule = rule;
     this.line = line || 0;
     this.column = string ? string.indexOf(escapeRegex(rule.when.regex)) : 0;
@@ -59,30 +83,6 @@ var GapLint = (function GAPLint() {
     }();
 
   };
-
-  // TODO is it worth to load a json file with rule objects? it would simplify a lot this code and the registration of new rules
-  function getRules() {
-    return [
-      new Rule('IF', {regex: /\bif\b/}, [{regex: /\bthen\b(.*)/, inline: false}, {regex: /\bfi;(.*)/, inline: false}],
-        Rule.prototype.Type.ERROR),
-      new Rule('WHILE', {regex: /\bwhile\b/}, [{regex: /\bdo(.*)/, inline: false}, {regex: /\bod;(.*)/, inline: false}],
-        Rule.prototype.Type.ERROR),
-      new Rule('FUNCTION', {regex: /\bfunction\b/}, [{regex: /\breturn(.*)/, inline: false}, {regex: /\bend;(.*)/, inline: false}],
-        Rule.prototype.Type.ERROR),
-      new Rule('REPEAT', {regex: /\brepeat\b/}, [{regex: /\buntil;(.*)/, inline: false}],
-        Rule.prototype.Type.ERROR),
-      new Rule('FOR', {regex: /\bfor\b/}, [{regex: /\bdo\b(.*)/, inline: false}, {regex: /\bod;(.*)/, inline: false}],
-        Rule.prototype.Type.ERROR),
-      new Rule('ATOMIC', {regex: /\batomic\b/}, [{regex: /\bdo\b(.*)/, inline: false}, {regex: /\bod;(.*)/, inline: false}],
-        Rule.prototype.Type.ERROR),
-      new Rule('FUNCTION_SIGN', {regex: /\bfunction\b/}, [{regex: /\(.*\)(.*)/, inline: true}], Rule.prototype.Type.WARNING,
-        'Something is wrong with the function signature.'),
-      new Rule('TAB', {regex: /\t/}, [{regex: /\//, inline: false}], Rule.prototype.Type.WARNING,
-        'Please use spaces instead of tabs.'),
-      new Rule('LOCAL', {regex: /\blocal\b/}, [{regex: /;/, inline: true}], Rule.prototype.Type.WARNING,
-        'Missing semicolon.')
-    ];
-  }
 
   self.validate = function validate(text) {
     if (!text) return [];
@@ -109,10 +109,10 @@ var GapLint = (function GAPLint() {
         var nextFlag = flags.pop();
         var unMatchedFlags = [];
         while (nextFlag && text) {
-          text = nextFlag.rule.validate(text);
+          text = nextFlag.rule.comply(text);
           if (text) {
             if (!nextFlag.rule.isCompliant()) unMatchedFlags.unshift(nextFlag);
-            // FIXME this causes an error when the code is all in the same line and the previous rule needs to be checked for compliance more than once
+            // FIXME this causes an error when the code is all in the same line and the previous rule needs to be checked for compliance more than one instruction
             nextFlag = flags.pop();
           } else {
             if (!nextFlag.rule.isCompliant()) unMatchedFlags.unshift(nextFlag);
