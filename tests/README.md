@@ -8,4 +8,4 @@ The unit tests for the GAP Lint module
 
 ## Run
 
-* [GAP Lint Tests](https://mcmartins.github.io/gap-lint-tests.html)
+* [GAP Lint Tests](https://mcmartins.github.io/gap-lint/tests.html)

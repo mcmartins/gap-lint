@@ -19,7 +19,7 @@ var GapLint = (function GAPLint() {
     xhr.send();
   };
 
-  loadJsonFromUrl("https://mcmartins.github.io/gap-lint/rules/rules.json");
+  loadJsonFromUrl('https://rawgit.com/mcmartins/gap-lint/master/rules/rules.json');
 
   function getRules() {
     var res = [];
@@ -39,12 +39,12 @@ var GapLint = (function GAPLint() {
     var self = this;
 
     this.getMatches = function (text) {
-      return new RegExp(self.when.regex, "m").exec(text)
+      return new RegExp(self.when.regex, 'mi').exec(text)
     };
 
     this.comply = function (text) {
-      if (self.then[0] && !self.then[0].checkOnce && new RegExp(self.then[0].regex, "m").exec(text)) {
-        text = text.match(new RegExp(self.then[0].regex, "m"))[1];
+      if (self.then[0] && !self.then[0].checkOnce && new RegExp(self.then[0].regex, 'mi').exec(text)) {
+        text = text.match(new RegExp(self.then[0].regex, 'mi'))[1];
         self.then.splice(0, 1);
       } else if (self.then[0] && self.then[0].inline) {
         self.then[0].checkOnce = true;
@@ -77,9 +77,9 @@ var GapLint = (function GAPLint() {
     }
 
     this.message = function () {
-      return self.rule.message || 'rule: ' + self.rule.name
+      return 'rule: ' + self.rule.name
         + ', line: ' + self.line + ', col: ' + self.column
-        + ' - Missing ' + escapeRegex(self.rule.then.join(', ')) + '.'; //TODO fix the join as now then is an object!
+        + self.rule.message.replace("{}", escapeRegex(self.rule.then.join(', '))); //TODO fix the join as now then is an object!
     }();
 
   };
