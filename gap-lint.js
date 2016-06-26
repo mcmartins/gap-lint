@@ -39,12 +39,12 @@ var GapLint = (function GAPLint() {
     var self = this;
 
     this.getMatches = function (text) {
-      return new RegExp(self.when.regex, 'mi').exec(text)
+      return new RegExp(self.when.regex, 'm').exec(text)
     };
 
     this.comply = function (text) {
-      if (self.then[0] && !self.then[0].checkOnce && new RegExp(self.then[0].regex, 'mi').exec(text)) {
-        text = text.match(new RegExp(self.then[0].regex, 'mi'))[1];
+      if (self.then[0] && !self.then[0].checkOnce && new RegExp(self.then[0].regex, 'm').exec(text)) {
+        text = text.match(new RegExp(self.then[0].regex, 'm'))[1];
         self.then.splice(0, 1);
       } else if (self.then[0] && self.then[0].inline) {
         self.then[0].checkOnce = true;
@@ -77,8 +77,7 @@ var GapLint = (function GAPLint() {
     }
 
     this.message = function () {
-      return 'rule: ' + self.rule.name
-        + ', line: ' + self.line + ', col: ' + self.column
+      return 'rule: {1}, line: {2}, col: {3} '.replace('{1}', self.rule.name).replace('{2}', self.line).replace('{3}', self.column)
         + self.rule.message.replace("{}", escapeRegex(self.rule.then.join(', '))); //TODO fix the join as now then is an object!
     }();
 
