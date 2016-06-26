@@ -24,7 +24,7 @@ var GapLint = (function GAPLint() {
   function getRules() {
     var res = [];
     loadedRules.forEach(function each(rule) {
-      res.push(new Rule(rule));
+      res.push(new Rule(JSON.parse(JSON.stringify(rule))));
     });
     return res;
   }
