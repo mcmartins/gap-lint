@@ -49,7 +49,6 @@ QUnit.test('Chunk of code', function (assert) {
   assert.ok(results[0].rule.severity == 'warning', 'Testing text: ' + text + ' - should return severity warning.');
   assert.ok(results[0].line == 19, 'Testing text: ' + text + ' - should return line 19.');
   assert.ok(results[0].column == 1, 'Testing text: ' + text + ' - should return column 1.');
-  assert.ok(results[0].message == 'Missing semicolon.', 'Testing text: ' + text + ' - should return message Missing semicolon.');
 });
 
 QUnit.test('Chunk of code', function (assert) {
