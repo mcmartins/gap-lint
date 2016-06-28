@@ -58,13 +58,6 @@ var GapLint = (function GAPLint() {
 
   };
 
-  Rule.prototype = {
-    Type: {
-      WARNING: 'warning',
-      ERROR: 'error'
-    }
-  };
-
   var Flag = function Flag(line, string, rule) {
     this.rule = rule;
     this.line = line || 0;
@@ -77,8 +70,9 @@ var GapLint = (function GAPLint() {
     }
 
     this.message = function () {
-      return 'rule: {1}, line: {2}, col: {3} '.replace('{1}', self.rule.name).replace('{2}', self.line).replace('{3}', self.column)
-        + self.rule.message.replace("{}", escapeRegex(self.rule.then.join(', '))); //TODO fix the join as now then is an object!
+      return 'rule: {1}, line: {2}, col: {3} - {4}'
+        .replace('{1}', self.rule.name).replace('{2}', self.line).replace('{3}', self.column)
+        .replace('{4}', self.rule.message.replace("{}", escapeRegex(self.rule.then.map(function (r) {return r.regex;}).join(', '))));
     }();
 
   };
