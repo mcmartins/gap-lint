@@ -3,7 +3,7 @@
     {
       "name": "IF_STMT",
       "severity": "error",
-      "message": "Missing {}.",
+      "message": "Missing {}",
       "when": {
         "regex": "\\bif\\b"
       },
@@ -21,7 +21,7 @@
     {
       "name": "IF_STMT_ELIF",
       "severity": "error",
-      "message": "Missing {}.",
+      "message": "Missing {}",
       "when": {
         "regex": "\\belif\\b"
       },
@@ -35,7 +35,7 @@
     {
       "name": "WHILE_STMT",
       "severity": "error",
-      "message": "Missing {}.",
+      "message": "Missing {}",
       "when": {
         "regex": "\\bwhile\\b"
       },
@@ -53,7 +53,7 @@
     {
       "name": "FOR_STMT",
       "severity": "error",
-      "message": "Missing {}.",
+      "message": "Missing {}",
       "when": {
         "regex": "\\bfor\\b"
       },
@@ -71,7 +71,7 @@
     {
       "name": "ATOMIC_STMT",
       "severity": "error",
-      "message": "Missing {}.",
+      "message": "Missing {}",
       "when": {
         "regex": "\\batomic\\b"
       },
@@ -89,7 +89,7 @@
     {
       "name": "REPEAT_STMT",
       "severity": "error",
-      "message": "Missing {}.",
+      "message": "Missing {}",
       "when": {
         "regex": "\\brepeat\\b"
       },
@@ -121,7 +121,7 @@
     {
       "name": "TAB",
       "severity": "warning",
-      "message": "Please use spaces instead of tabs.",
+      "message": "Please use spaces instead of tabs",
       "when": {
         "regex": "\\t"
       },
@@ -135,7 +135,7 @@
     {
       "name": "LOCAL",
       "severity": "warning",
-      "message": "Missing semicolon.",
+      "message": "Missing semicolon",
       "when": {
         "regex": "\\blocal\\b"
       },
@@ -149,7 +149,7 @@
     {
       "name": "BRACKETS_CURVE",
       "severity": "warning",
-      "message": "Missing close curve bracket ')'.",
+      "message": "Missing close curve bracket ')'",
       "when": {
         "regex": "\\("
       },
@@ -163,7 +163,7 @@
     {
       "name": "BRACKETS",
       "severity": "warning",
-      "message": "Missing close bracket ']'.",
+      "message": "Missing close bracket ']'",
       "when": {
         "regex": "\\["
       },
@@ -177,7 +177,7 @@
     {
       "name": "BRACKETS_CURLY",
       "severity": "warning",
-      "message": "Missing curly bracket '}'.",
+      "message": "Missing curly bracket '}'",
       "when": {
         "regex": "\\{"
       },
@@ -191,7 +191,7 @@
     {
       "name": "RETURN",
       "severity": "warning",
-      "message": "Missing semicolon.",
+      "message": "Missing semicolon",
       "when": {
         "regex": "\\breturn\\b"
       },
@@ -205,13 +205,27 @@
     {
       "name": "VAR_ASSIGN",
       "severity": "warning",
-      "message": "Missing semicolon.",
+      "message": "Missing semicolon",
       "when": {
         "regex": "\\b.*:=.(?!function).*\\b"
       },
       "then": [
         {
           "regex": "(.*);",
+          "inline": true
+        }
+      ]
+    },
+    {
+      "name": "QUOTES",
+      "severity": "warning",
+      "message": "Missing end quote",
+      "when": {
+        "regex": "\\b.*\".*\\b"
+      },
+      "then": [
+        {
+          "regex": "(.*).*\"",
           "inline": true
         }
       ]

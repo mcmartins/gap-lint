@@ -1,3 +1,10 @@
+/**
+ * TODO properly comment this module
+ * TODO add options including the url to load rules and other useful stuff, such as don't include rule in error message etc
+ * TODO improve performance by changing the way this works. The algorithm should match words in each line using one regex
+ * that is the or of all the rules and use the match group to get the position of the rule and instantiate it.
+ * This will improve the algorithm by not iterating through rules!
+ */
 var GapLint = (function GAPLint() {
   'use strict';
 
@@ -9,16 +16,16 @@ var GapLint = (function GAPLint() {
     xhr.open('GET', url, true);
     xhr.responseType = 'json';
     xhr.onload = function () {
-      var status = xhr.status;
-      if (status == 200) {
+      if (xhr.status == 200) {
         loadedRules = loadedRules.concat(xhr.response.rules);
       } else {
-        throw new Error('Could not load the resource from ' + url + '. HTML Status Code is ' + status);
+        throw new Error('Could not load the resource from: ' + url + '. HTML Status Code: ' + xhr.status);
       }
     };
     xhr.send();
   };
 
+  // load default rules
   loadJsonFromUrl('https://rawgit.com/mcmartins/gap-lint/master/rules/rules.json');
 
   function getRules() {
@@ -32,7 +39,7 @@ var GapLint = (function GAPLint() {
   var Rule = function Rule(rule) {
     this.name = rule.name;
     this.when = rule.when;
-    this.then = rule.then;
+    this.then = rule.then || [];
     this.severity = rule.severity;
     this.message = rule.message;
 
@@ -43,11 +50,11 @@ var GapLint = (function GAPLint() {
     };
 
     this.comply = function (text) {
-      if (self.then[0] && !self.then[0].checkOnce && new RegExp(self.then[0].regex, 'm').exec(text)) {
+      if (self.then[0] && !self.then[0].checked && new RegExp(self.then[0].regex, 'm').exec(text)) {
         text = text.match(new RegExp(self.then[0].regex, 'm'))[1];
         self.then.splice(0, 1);
       } else if (self.then[0] && self.then[0].inline) {
-        self.then[0].checkOnce = true;
+        self.then[0].checked = true;
       }
       return text;
     };
@@ -65,15 +72,21 @@ var GapLint = (function GAPLint() {
 
     var self = this;
 
+    function getThenParametersString() {
+      return escapeRegex(self.rule.then.map(function (r) {
+        return r.regex;
+      }).join(', '));
+    }
+
     function escapeRegex(string) {
       return string.toString().replace(/[|&$%@"<>()+.\/*\\b]/g, '')
     }
 
-    this.message = function () {
+    this.getMessage = function () {
       return 'rule: {1}, line: {2}, col: {3} - {4}'
-        .replace('{1}', self.rule.name).replace('{2}', self.line).replace('{3}', self.column)
-        .replace('{4}', self.rule.message.replace("{}", escapeRegex(self.rule.then.map(function (r) {return r.regex;}).join(', '))));
-    }();
+        .replace('{1}', self.rule.name).replace('{2}', self.line + 1).replace('{3}', self.column)
+        .replace('{4}', self.rule.message.replace("{}", getThenParametersString()));
+    };
 
   };
 
@@ -85,6 +98,7 @@ var GapLint = (function GAPLint() {
     var lines = text.split('\n');
     // might happen if there are no break lines
     if (!Array.isArray(lines)) lines = [lines];
+    // get fresh array of rules each time
     var rules = getRules();
     lines.forEach(function each(text, lineIndex) {
       rules.forEach(function each(rule, ruleIndex) {
@@ -103,13 +117,9 @@ var GapLint = (function GAPLint() {
         var unMatchedFlags = [];
         while (nextFlag && text) {
           text = nextFlag.rule.comply(text);
-          if (text) {
-            if (!nextFlag.rule.isCompliant()) unMatchedFlags.unshift(nextFlag);
-            // FIXME this causes an error when the code is all in the same line and the previous rule needs to be checked for compliance more than one instruction
-            nextFlag = flags.pop();
-          } else {
-            if (!nextFlag.rule.isCompliant()) unMatchedFlags.unshift(nextFlag);
-          }
+          // FIXME this causes an error when the code is all in the same line and the previous rule needs to be checked for compliance more than one instruction
+          if (!nextFlag.rule.isCompliant()) unMatchedFlags.unshift(nextFlag);
+          if (text) nextFlag = flags.pop();
         }
         flags = flags.concat(unMatchedFlags);
       }
