@@ -101,9 +101,9 @@
       ]
     },
     {
-      "name": "FUNCTION_RTN_STRCT",
-      "severity": "warning",
-      "message": "Missing return in the function. Are you sure you didn't forget?",
+      "name": "FUNCTION_STRCT",
+      "severity": "error",
+      "message": "Missing {}",
       "when": {
         "regex": "\\bfunction\\b"
       },
@@ -127,27 +127,13 @@
       },
       "then": [
         {
-          "regex": "\\/",
+          "regex": "a^",
           "inline": false
         }
       ]
     },
     {
-      "name": "LOCAL_VAR_DECL",
-      "severity": "warning",
-      "message": "Missing semicolon",
-      "when": {
-        "regex": "\\blocal\\b"
-      },
-      "then": [
-        {
-          "regex": "(.*);",
-          "inline": true
-        }
-      ]
-    },
-    {
-      "name": "BRACKETS",
+      "name": "BRACKETS_SQUARE",
       "severity": "warning",
       "message": "Missing close bracket ']'",
       "when": {
@@ -189,29 +175,15 @@
       ]
     },
     {
-      "name": "RETURN_DCLR",
+      "name": "SEMICOLON",
       "severity": "warning",
-      "message": "Missing semicolon",
+      "message": "Missing semicolon ';'",
       "when": {
-        "regex": "\\breturn\\b"
+        "regex": "\\b.*:=.(?!function).*\\b|\\breturn\\b|\\blocal\\b"
       },
       "then": [
         {
-          "regex": "(.*);",
-          "inline": true
-        }
-      ]
-    },
-    {
-      "name": "VAR_ASSIGN",
-      "severity": "warning",
-      "message": "Missing semicolon",
-      "when": {
-        "regex": "\\b.*:=.(?!function).*\\b"
-      },
-      "then": [
-        {
-          "regex": "(.*);",
+          "regex": "(.*;)",
           "inline": true
         }
       ]
@@ -219,13 +191,13 @@
     {
       "name": "QUOTES",
       "severity": "warning",
-      "message": "Missing end quote",
+      "message": "Missing end quote '\"'",
       "when": {
         "regex": "\\b.*\".*\\b"
       },
       "then": [
         {
-          "regex": "(.*\".*\\w.*\".*)",
+          "regex": "(.*\".*\".*)",
           "inline": true
         }
       ]

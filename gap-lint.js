@@ -1,10 +1,23 @@
-/**
- * TODO properly comment this module
- * TODO add options including the url to load rules and other useful stuff, such as don't include rule in error message etc
- * TODO improve performance by changing the way this works. The algorithm should match words in each line using one regex
- * that is the or of all the rules and use the match group to get the position of the rule and instantiate it.
- * This will improve the algorithm by not iterating through rules!
- */
+// gap-lint.js - 2016-07-05
+//
+// Copyright (c) 2016 Manuel Martins
+// Under License GNU GENERAL PUBLIC LICENSE - Version 2, June 1991
+//
+// GAPLint(options) is a module that takes an optional options argument.
+// Valid options are:
+//
+//      options.rulesUrl          An URL to the json rules.
+//      options.messageShowRule   A flag to whether show or not the rule name in the message.
+//
+// GAPLint returns an object containing a 'validate' function. This function
+// accepts one argument, the text to validate, and returns an array of objects.
+// These object are of type 'Flag' and contains information on the error/warning raised.
+//
+//      Flag.line                 The line where the flag was detected
+//      Flag.column               The column where the flag starts
+//      Flag.rule                 A rule object contains all the information on the trigger and instructions
+//      Flag.getMessage           A function that returns the message formatted for the current flag
+//
 var GapLint = (function GAPLint() {
   'use strict';
 
@@ -73,9 +86,9 @@ var GapLint = (function GAPLint() {
     var self = this;
 
     function getThenParametersString() {
-      return escapeRegex(self.rule.then.map(function (r) {
-        return r.regex;
-      }).join(', '));
+      return self.rule.then.map(function (r) {
+        return '\'' + escapeRegex(r.regex) + '\'';
+      }).join(', ');
     }
 
     function escapeRegex(string) {

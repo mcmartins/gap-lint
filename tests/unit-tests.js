@@ -22,13 +22,33 @@ QUnit.test('If statement', function (assert) {
   assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
+QUnit.test('If statement on error', function (assert) {
+  var text = 'if the \n fi;';
+  assert.ok(window.GapLint.validate(text).length == 1, 'Testing text: ' + text + ' - should return 0 results.');
+});
+
 QUnit.test('While statement', function (assert) {
   var text = 'while do \n od;';
   assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
+QUnit.test('While statement on error', function (assert) {
+  var text = 'while do \n od';
+  assert.ok(window.GapLint.validate(text).length == 1, 'Testing text: ' + text + ' - should return 0 results.');
+});
+
 QUnit.test('Function creation', function (assert) {
   var text = 'a := function ()\n return b;\n end;';
+  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+});
+
+QUnit.test('Function creation on error', function (assert) {
+  var text = 'a := function ()\n return b;\n end';
+  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+});
+
+QUnit.test('Function creation on error', function (assert) {
+  var text = 'a := function ()\n end;';
   assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
@@ -37,12 +57,22 @@ QUnit.test('Repeat statement', function (assert) {
   assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
+QUnit.test('Repeat statement on error', function (assert) {
+  var text = 'repeat \nuntil';
+  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+});
+
 QUnit.test('For statement', function (assert) {
   var text = 'for do \nod;';
   assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
-QUnit.test('Chunk of code', function (assert) {
+QUnit.test('For statement on error', function (assert) {
+  var text = 'for d \nod;';
+  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+});
+
+QUnit.test('Chunk of code with errors', function (assert) {
   var text = '# Literals\n1234\n.123\n7\n2147483647\n(1,2,3)(4,5,6)\n\n"String literals"\n\n"""\nMultiline\nstring\nliterals\n"""\n9123really\w\ eir\_identifier := 5;\n\n\nf := function(a,b,c)\n\n local x,y,z,g\n\nreturn x;\nend;';
   var results = window.GapLint.validate(text);
   assert.ok(results.length == 1, 'Testing text: ' + text + ' - should return 1 results.');
@@ -51,7 +81,7 @@ QUnit.test('Chunk of code', function (assert) {
   assert.ok(results[0].column == 1, 'Testing text: ' + text + ' - should return column 1.');
 });
 
-QUnit.test('Chunk of code', function (assert) {
+QUnit.test('Chunk of code without errors', function (assert) {
   var text = '# Literals\n1234\n.123\n7\n2147483647\n(1,2,3)(4,5,6)\n\n"String literals"\n\n"""\nMultiline\nstring\nliterals\n"""\n9123really\w\ eir\_identifier := 5;\n\n\nf := function(a,b,c)\n\nlocal x,y,z,g;\n\nreturn x;\nend;';
   assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
 });

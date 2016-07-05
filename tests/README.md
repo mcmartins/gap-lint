@@ -6,6 +6,6 @@ The unit tests for the GAP Lint module
 
 * qunit 2.2.0
 
-## Run
+## Unit Tests
 
 * [GAP Lint Tests](https://mcmartins.github.io/gap-lint)
