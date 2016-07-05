@@ -19,7 +19,7 @@
       ]
     },
     {
-      "name": "IF_STMT_ELIF",
+      "name": "IF_ELIF_STMT",
       "severity": "error",
       "message": "Missing {}",
       "when": {
@@ -101,7 +101,7 @@
       ]
     },
     {
-      "name": "FUNCTION",
+      "name": "FUNCTION_RTN_STRCT",
       "severity": "warning",
       "message": "Missing return in the function. Are you sure you didn't forget?",
       "when": {
@@ -133,7 +133,7 @@
       ]
     },
     {
-      "name": "LOCAL",
+      "name": "LOCAL_VAR_DECL",
       "severity": "warning",
       "message": "Missing semicolon",
       "when": {
@@ -142,20 +142,6 @@
       "then": [
         {
           "regex": "(.*);",
-          "inline": true
-        }
-      ]
-    },
-    {
-      "name": "BRACKETS_CURVE",
-      "severity": "warning",
-      "message": "Missing close curve bracket ')'",
-      "when": {
-        "regex": "\\("
-      },
-      "then": [
-        {
-          "regex": "(.*\\).*)",
           "inline": true
         }
       ]
@@ -175,6 +161,20 @@
       ]
     },
     {
+      "name": "BRACKETS_CURVE",
+      "severity": "warning",
+      "message": "Missing close curve bracket ')'",
+      "when": {
+        "regex": "\\((?!.*:=.*)"
+      },
+      "then": [
+        {
+          "regex": "(.*\\).*)",
+          "inline": true
+        }
+      ]
+    },
+    {
       "name": "BRACKETS_CURLY",
       "severity": "warning",
       "message": "Missing curly bracket '}'",
@@ -189,7 +189,7 @@
       ]
     },
     {
-      "name": "RETURN",
+      "name": "RETURN_DCLR",
       "severity": "warning",
       "message": "Missing semicolon",
       "when": {
@@ -225,7 +225,7 @@
       },
       "then": [
         {
-          "regex": "(.*)\".*\".*",
+          "regex": "(.*\".*\\w.*\".*)",
           "inline": true
         }
       ]

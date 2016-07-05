@@ -56,3 +56,7 @@ QUnit.test('Chunk of code', function (assert) {
   assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
+QUnit.test('Quotes', function (assert) {
+  var text = 'Error("This is a group!\n");';
+  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+});
