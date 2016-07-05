@@ -44,12 +44,12 @@ QUnit.test('Function creation', function (assert) {
 
 QUnit.test('Function creation on error', function (assert) {
   var text = 'a := function ()\n return b;\n end';
-  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+  assert.ok(window.GapLint.validate(text).length == 1, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
 QUnit.test('Function creation on error', function (assert) {
   var text = 'a := function ()\n end;';
-  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+  assert.ok(window.GapLint.validate(text).length == 1, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
 QUnit.test('Repeat statement', function (assert) {
@@ -59,7 +59,7 @@ QUnit.test('Repeat statement', function (assert) {
 
 QUnit.test('Repeat statement on error', function (assert) {
   var text = 'repeat \nuntil';
-  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+  assert.ok(window.GapLint.validate(text).length == 1, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
 QUnit.test('For statement', function (assert) {
@@ -69,7 +69,7 @@ QUnit.test('For statement', function (assert) {
 
 QUnit.test('For statement on error', function (assert) {
   var text = 'for d \nod;';
-  assert.ok(window.GapLint.validate(text).length == 0, 'Testing text: ' + text + ' - should return 0 results.');
+  assert.ok(window.GapLint.validate(text).length == 1, 'Testing text: ' + text + ' - should return 0 results.');
 });
 
 QUnit.test('Chunk of code with errors', function (assert) {
