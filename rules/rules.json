@@ -5,15 +5,15 @@
       "severity": "error",
       "message": "Missing {}",
       "when": {
-        "regex": "\\bif\\b"
+        "match": "\\bif\\b"
       },
       "then": [
         {
-          "regex": "\\bthen\\b(.*)",
+          "match": "\\bthen\\b",
           "inline": true
         },
         {
-          "regex": "\\bfi;(.*)",
+          "match": "\\bfi;",
           "inline": false
         }
       ]
@@ -23,65 +23,29 @@
       "severity": "error",
       "message": "Missing {}",
       "when": {
-        "regex": "\\belif\\b"
+        "match": "\\belif\\b"
       },
       "then": [
         {
-          "regex": "\\bthen\\b(.*)",
+          "match": "\\bthen\\b",
           "inline": true
         }
       ]
     },
     {
-      "name": "WHILE_STMT",
+      "name": "DO_STMT",
       "severity": "error",
       "message": "Missing {}",
       "when": {
-        "regex": "\\bwhile\\b"
+        "match": "\\bfor\\b|\\bwhile\\b|\\batomic\\b"
       },
       "then": [
         {
-          "regex": "\\bdo(.*)",
+          "match": "\\bdo\\b",
           "inline": false
         },
         {
-          "regex": "\\bod;(.*)",
-          "inline": false
-        }
-      ]
-    },
-    {
-      "name": "FOR_STMT",
-      "severity": "error",
-      "message": "Missing {}",
-      "when": {
-        "regex": "\\bfor\\b"
-      },
-      "then": [
-        {
-          "regex": "\\bdo(.*)",
-          "inline": false
-        },
-        {
-          "regex": "\\bod;(.*)",
-          "inline": false
-        }
-      ]
-    },
-    {
-      "name": "ATOMIC_STMT",
-      "severity": "error",
-      "message": "Missing {}",
-      "when": {
-        "regex": "\\batomic\\b"
-      },
-      "then": [
-        {
-          "regex": "\\bdo(.*)",
-          "inline": false
-        },
-        {
-          "regex": "\\bod;(.*)",
+          "match": "\\bod;",
           "inline": false
         }
       ]
@@ -91,11 +55,11 @@
       "severity": "error",
       "message": "Missing {}",
       "when": {
-        "regex": "\\brepeat\\b"
+        "match": "\\brepeat\\b"
       },
       "then": [
         {
-          "regex": "\\buntil(.*)",
+          "match": "until",
           "inline": false
         }
       ]
@@ -105,15 +69,15 @@
       "severity": "error",
       "message": "Missing {}",
       "when": {
-        "regex": "\\bfunction\\b"
+        "match": "\\bfunction\\b"
       },
       "then": [
         {
-          "regex": "\\breturn(.*)",
+          "match": "\\breturn\\b",
           "inline": false
         },
         {
-          "regex": "\\bend;(.*)",
+          "match": "\\bend;",
           "inline": false
         }
       ]
@@ -123,12 +87,12 @@
       "severity": "warning",
       "message": "Please use spaces instead of tabs",
       "when": {
-        "regex": "\\t"
+        "match": "\\t"
       },
       "then": [
         {
-          "regex": "a^",
-          "inline": false
+          "match": "a^",
+          "inline": true
         }
       ]
     },
@@ -137,11 +101,11 @@
       "severity": "warning",
       "message": "Missing close bracket ']'",
       "when": {
-        "regex": "\\["
+        "match": "\\["
       },
       "then": [
         {
-          "regex": "(.*\\].*)",
+          "match": "\\]",
           "inline": true
         }
       ]
@@ -149,13 +113,13 @@
     {
       "name": "BRACKETS_CURVE",
       "severity": "warning",
-      "message": "Missing close curve bracket ')'",
+      "message": "Missing close bracket ')'",
       "when": {
-        "regex": "\\((?!.*:=.*)"
+        "match": "\\((?!.*:=.*)"
       },
       "then": [
         {
-          "regex": "(.*\\).*)",
+          "match": "\\)",
           "inline": true
         }
       ]
@@ -163,13 +127,13 @@
     {
       "name": "BRACKETS_CURLY",
       "severity": "warning",
-      "message": "Missing curly bracket '}'",
+      "message": "Missing close bracket '}'",
       "when": {
-        "regex": "\\{"
+        "match": "\\{"
       },
       "then": [
         {
-          "regex": "(.*\\}.*)",
+          "match": "\\}",
           "inline": true
         }
       ]
@@ -179,11 +143,11 @@
       "severity": "warning",
       "message": "Missing semicolon ';'",
       "when": {
-        "regex": "\\b.*:=.(?!function).*\\b|\\breturn\\b|\\blocal\\b"
+        "match": "\\b.*:=.(?!function).*\\b|\\breturn\\b|\\blocal\\b"
       },
       "then": [
         {
-          "regex": "(.*;)",
+          "match": ";",
           "inline": true
         }
       ]
@@ -193,11 +157,11 @@
       "severity": "warning",
       "message": "Missing end quote '\"'",
       "when": {
-        "regex": "\\b.*\".*\\b"
+        "match": "\\b.*\".*\\b"
       },
       "then": [
         {
-          "regex": "(.*\".*\".*)",
+          "match": "\".*\"",
           "inline": true
         }
       ]

@@ -58,21 +58,31 @@ var GapLint = (function GAPLint() {
 
     var self = this;
 
-    this.getMatches = function (text) {
-      return new RegExp(self.when.regex, 'm').exec(text)
+    // instantiate rules regex
+    this.when.match = new RegExp(this.when.match.toString(), 'g');
+    for (var i = 0; i < this.then.length; i++) {
+      this.then[i].match = new RegExp(this.then[i].match.toString(), 'm');
+    }
+
+    this.getMatches = function getMatches(text) {
+      return text.match(this.when.match)
     };
 
-    this.comply = function (text) {
-      if (self.then[0] && !self.then[0].checked && new RegExp(self.then[0].regex, 'm').exec(text)) {
-        text = text.match(new RegExp(self.then[0].regex, 'm'))[1];
-        self.then.splice(0, 1);
-      } else if (self.then[0] && self.then[0].inline) {
-        self.then[0].checked = true;
+    this.checkInstructions = function checkInstructions(text) {
+      var length = this.then.length;
+      for (var i = 0; i <= length; length-- && i++) {
+        if (!self.isCompliant() && !self.then[i].checked && self.then[i].match.exec(text)) {
+          text = text.replace(self.then[i].match, '');
+          self.then.splice(i, 1);
+          i--;
+        } else if (!self.isCompliant() && self.then[i].inline) {
+          self.then[i].checked = true;
+        }
       }
       return text;
     };
 
-    this.isCompliant = function () {
+    this.isCompliant = function isCompliant() {
       return self.then.length == 0;
     };
 
@@ -81,21 +91,21 @@ var GapLint = (function GAPLint() {
   var Flag = function Flag(line, string, rule) {
     this.rule = rule;
     this.line = line || 0;
-    this.column = string ? string.indexOf(escapeRegex(rule.when.regex)) : 0;
+    this.column = string ? string.indexOf(escapeRegex(rule.when.match.source)) : 0;
 
     var self = this;
 
     function getThenParametersString() {
       return self.rule.then.map(function (r) {
-        return '\'' + escapeRegex(r.regex) + '\'';
+        return '\'' + escapeRegex(r.match.source) + '\'';
       }).join(', ');
     }
 
     function escapeRegex(string) {
-      return string.toString().replace(/[|&$%@"<>()+.\/*\\b]/g, '')
+      return string.toString().replace(/[\?!|&$%@"<>()+.\/*\\b]/g, '')
     }
 
-    this.getMessage = function () {
+    this.getMessage = function getMessage() {
       return 'rule: {1}, line: {2}, col: {3} - {4}'
         .replace('{1}', self.rule.name).replace('{2}', self.line + 1).replace('{3}', self.column)
         .replace('{4}', self.rule.message.replace("{}", getThenParametersString()));
@@ -129,8 +139,7 @@ var GapLint = (function GAPLint() {
         var nextFlag = flags.pop();
         var unMatchedFlags = [];
         while (nextFlag && text) {
-          text = nextFlag.rule.comply(text);
-          // FIXME this causes an error when the code is all in the same line and the previous rule needs to be checked for compliance more than one instruction
+          text = nextFlag.rule.checkInstructions(text);
           if (!nextFlag.rule.isCompliant()) unMatchedFlags.unshift(nextFlag);
           if (text) nextFlag = flags.pop();
         }

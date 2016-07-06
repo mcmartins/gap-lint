@@ -22,6 +22,7 @@
           },
           "severity": {
             "type": "string",
+            "enum": [ "error", "warning" ],
             "minLength": 1,
             "title": "Severity",
             "description": "The type of severity for the current rule. One of: error, warning."
@@ -31,15 +32,15 @@
             "title": "When",
             "description": "Here you must specify the trigger for this rule.",
             "properties": {
-              "regex": {
+              "match": {
                 "type": "string",
                 "minLength": 1,
-                "title": "Regex",
-                "description": "The regular expression that will trigger the current rule."
+                "title": "Match",
+                "description": "The string/regular expression that will trigger the current rule."
               }
             },
             "required": [
-              "regex"
+              "match"
             ]
           },
           "then": {
@@ -52,11 +53,11 @@
               "title": "Instruction",
               "description": "An Instruction is basically the instruction that must follow the trigger.",
               "properties": {
-                "regex": {
+                "match": {
                   "type": "string",
                   "minLength": 1,
-                  "title": "Regex",
-                  "description": "The Instruction regular expression that must exist follow the trigger."
+                  "title": "Match",
+                  "description": "The Instruction string/regular expression that must exist follow the trigger."
                 },
                 "inline": {
                   "type": "boolean",
@@ -65,7 +66,7 @@
                 }
               },
               "required": [
-                "regex",
+                "match",
                 "inline"
               ]
             }
