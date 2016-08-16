@@ -120,7 +120,7 @@
       "then": [
         {
           "match": "\\)",
-          "inline": true
+          "inline": false
         }
       ]
     },
