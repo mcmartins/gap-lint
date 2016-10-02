@@ -1,5 +1,6 @@
 # Gap Lint Tool
-GAP-Lint is a linter tool to detect errors and problems in GAP code.
+GAP-Lint is a linter tool to detect errors and problems in GAP code. The grammar is defined in BNF and uses ANTLR4 to
+generate parsers.
 
 # Try Me
 
