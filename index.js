@@ -3,7 +3,7 @@ var GapLexer = require('gapLexer').gapLexer;
 var GapParser = require('gapParser').gapParser;
 var GAPLintListener = require('gapLintListener').GAPLintListener;
 
-exports.GapLint = {
+window.GapLint = {
   validate: function validate(input) {
     var chars = new antlr4.InputStream(input);
     var lexer = new GapLexer(chars);
