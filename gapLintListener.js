@@ -11,13 +11,12 @@ GAPLintListener.prototype = Object.create(antlr4.error.ErrorListener.prototype);
 GAPLintListener.prototype.constructor = GAPLintListener;
 GAPLintListener.prototype.syntaxError = function (recognizer, offendingSymbol, line, column, msg, e) {
   errors.push({
-    line: line - 1,
+    line: line-1,
     column: column,
-    message: msg,
+    message: 'line ' + line + ':' + column + ' - ' +  msg,
     type: "error"
   });
 };
-
 GAPLintListener.prototype.getErrors = function () {
   return errors;
 };

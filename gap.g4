@@ -9,36 +9,18 @@ block
  ;
 
 statement
- : expression ';'?
- | invocation ';'
- | operation ';'
- | functionCall ';'
- | functionDecl ';'
- | ifStatement ';'
- | forStatement ';'
- | whileStatement ';'
- | doStatement ';'
- | repeatStatement
- ;
-
-assignment
- : Identifier (indexes|list)? ':=' expression
- ;
-
-invocation
- : (Identifier|Number)
- ;
-
-operation
- : (Identifier | Number) (operator (Identifier | Number))+ (Equals (operation|expression)*)?
- ;
-
-functionCall
- : Identifier '(' exprList? ')'
+ : expression SemiColon
+ | expression Assign expression SemiColon
+ | ifStatement SemiColon
+ | forStatement SemiColon
+ | whileStatement SemiColon
+ | doStatement SemiColon
+ | repeatStatement SemiColon
+ | TrippleQuote
  ;
 
 functionDecl
- : Function '(' idList? ')' block? End
+ : Function OParen idList? CParen (statement|Local idList SemiColon)+ End
  ;
 
 doStatement
@@ -46,7 +28,7 @@ doStatement
  ;
 
 ifStatement
- : ifStat elseIfStat* elseStat? fiIfStat
+ : ifStat elseIfStat* elseStat? Fi
  ;
 
 ifStat
@@ -61,91 +43,71 @@ elseStat
  : Else block?
  ;
 
-fiIfStat
- : Fi
- ;
-
 forStatement
- : For expression In expression Do block* Od
+ : For expression In expression Do block? Od
  ;
 
 whileStatement
- : While expression Do block* Od
+ : While expression Do block? Od
  ;
 
 repeatStatement
- : Repeat expression Until block* ';'
+ : Repeat expression Until block?
  ;
 
 idList
- : Identifier (',' Identifier)*
+ : Identifier (Comma Identifier)*
  ;
 
 exprList
- : expression ((','|':') expression)*
+ : (expression|functionDecl) ((Comma|Colon) (expression|functionDecl))*
+ | expression Range expression
  ;
 
 expression
- : assignment  #assignmentExpression
- | Subtract expression  #unaryMinusExpression
- | '!' expression   #notExpression
+ : Minus expression #unaryMinusExpression
+ | Not expression #notExpression
+ | Return expression #returnExpression
  | expression Pow expression#powerExpression
- | expression Multiply expression   #multiplyExpression
- | expression Divide expression #divideExpression
+ | expression Star expression #multiplyExpression
+ | expression Slash expression #divideExpression
  | expression Modulus expression#modulusExpression
- | expression Add expression#addExpression
- | expression Subtract expression   #subtractExpression
- | expression GTEquals expression   #gtEqExpression
- | expression LTEquals expression   #ltEqExpression
+ | expression Plus expression#addExpression
+ | expression Minus expression #subtractExpression
+ | expression GTEquals expression #gtEqExpression
+ | expression LTEquals expression #ltEqExpression
  | expression GT expression #gtExpression
  | expression LT expression #ltExpression
  | expression Equals expression #eqExpression
- | expression NEquals expression#notEqExpression
- | expression And expression#andExpression
+ | expression NEquals expression #notEqExpression
+ | expression And expression #andExpression
  | expression Or expression #orExpression
- | expression SHandFunc expression  #shorthandFunctionCall
+ | expression ShortHandFunction expression #shorthandFunctionCall
  | expression In expression #inExpression
- | Not expression   #notExpression
- | Number   #numberExpression
- | (Number|Identifier) Range (Number|Identifier)  #rangeExpression
- | Boolean  #boolExpression
- | String   #stringExpression
- | functionCall indexes?#functionCallExpression
- | list indexes?#listExpression
- | Identifier indexes?  #identifierExpression
- | '(' expression ')' indexes?  #expressionExpression
- | Input '(' String? ')'#inputExpression
+ | list indexes? #listExpression
+ | tuple #tupleDeclaration
  | functionDecl #functionDeclaration
- | Return (Identifier|Number|Boolean)   #returnDeclaration
- | Local idList #localDeclaration
- | tuple#tupleDeclaration
- | listEvaluation   #newListEvaluation
+ | listEvaluation #newListEvaluation
+ | Number #numberExpression
+ | Boolean #boolExpression
+ | Quote #stringExpression
+ | Identifier (OParen exprList? CParen)? indexes? #callExpression
  ;
 
 list
- : '[' exprList? ']'
+ : OBracket exprList? CBracket
  ;
 
 tuple
- : ('(' (Number|Identifier) (',' (Number|Identifier))* ')')+
+ : (OParen(Number|Identifier)(Comma(Number|Identifier))*CParen)+
  ;
 
 listEvaluation
- : Identifier '{' ( '[' expression (Range expression | (',' expression)*) ']' )+
-  '}'
+ : Identifier (OBrace (OBracket expression (Range expression|(Comma expression)*)CBracket) CBrace)+
  ;
 
 indexes
- : ('[' expression ']')+
- ;
-
-operator
- : Add
- | Subtract
- | Multiply
- | Divide
- | Modulus
- | Pow
+ : (OBracket expression CBracket)+
  ;
 
 Function : 'function';
@@ -163,7 +125,7 @@ Do   : 'do';
 Od   : 'od';
 End  : 'end';
 In   : 'in';
-Repeat   : 'repeat';
+Repeat  : 'repeat';
 Until: 'until';
 
 Not  : 'not';
@@ -177,10 +139,10 @@ Pow  : '^';
 Excl : '!';
 GT   : '>';
 LT   : '<';
-Add  : '+';
-Subtract : '-';
-Multiply : '*';
-Divide   : '/';
+Plus  : '+';
+Minus : '-';
+Star : '*';
+Slash   : '/';
 Modulus  : '%';
 OBrace   : '{';
 CBrace   : '}';
@@ -188,12 +150,12 @@ OBracket : '[';
 CBracket : ']';
 OParen   : '(';
 CParen   : ')';
-SColon   : ';';
-Assign   : '=';
+SemiColon   : ';';
+Assign   : ':=';
 Comma: ',';
-QMark: '?';
+QuestionMark: '?';
 Colon: ':';
-SHandFunc: '->';
+ShortHandFunction: '->';
 Range: '..';
 
 Boolean
@@ -202,21 +164,24 @@ Boolean
  ;
 
 Number
- : Integer ('.' Digit+)? | ('.' Digit+)
+ : Integer ('.' Digit+)?|('.' Digit+)
  ;
 
 Identifier
  : [a-zA-Z0-9_@]+([\\]+[a-zA-Z0-9_@,.() ]+)*|([\\]+[a-zA-Z0-9_@,.() ]+)*[a-zA-Z0-9_@]+
  ;
 
-String
+Quote
  : '"' (ESC|.)*? '"'
  | '\'' (ESC|.)*? '\''
- | '"""' (ESC|.)*? '"""'
+ ;
+
+TrippleQuote
+ : '"""' (ESC|.)*? '"""'
  ;
 
 Comment
- : '#' .*? ('\r' | '\n')  -> skip
+ : '#' .*? ('\r'|'\n')  -> skip
  ;
 
 Space
