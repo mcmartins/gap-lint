@@ -66,8 +66,8 @@ exprList
 
 expression
  : Minus expression #unaryMinusExpression
- | Not expression #notExpression
- | Return expression #returnExpression
+ | Not  expression #notExpression
+ | Return expression? #returnExpression
  | expression Pow expression#powerExpression
  | expression Star expression #multiplyExpression
  | expression Slash expression #divideExpression
@@ -84,7 +84,9 @@ expression
  | expression Or expression #orExpression
  | expression ShortHandFunction expression #shorthandFunctionCall
  | expression In expression #inExpression
- | list indexes? #listExpression
+ | expression ComponentObject expression #componentObjectExpression
+ | expression Dot expression #accessMemberExpression
+ | list #listExpression
  | tuple #tupleDeclaration
  | functionDecl #functionDeclaration
  | listEvaluation #newListEvaluation
@@ -92,6 +94,7 @@ expression
  | Boolean #boolExpression
  | Quote #stringExpression
  | Identifier (OParen exprList? CParen)? indexes? #callExpression
+ | '(' expression ')' # parenthesisExpression
  ;
 
 list
@@ -103,7 +106,8 @@ tuple
  ;
 
 listEvaluation
- : Identifier (OBrace (OBracket expression (Range expression|(Comma expression)*)CBracket) CBrace)+
+ : Identifier (OBrace (OBracket exprList CBracket) CBrace)+
+ | Identifier (OBrace Identifier OParen (OBracket exprList CBracket) (Comma (OBracket exprList CBracket))* CParen CBrace)+
  ;
 
 indexes
@@ -153,10 +157,12 @@ CParen   : ')';
 SemiColon   : ';';
 Assign   : ':=';
 Comma: ',';
+Dot : '.' ;
 QuestionMark: '?';
 Colon: ':';
 ShortHandFunction: '->';
 Range: '..';
+ComponentObject : '!.' ;
 
 Boolean
  : 'true'
