@@ -10,7 +10,6 @@ block
 
 statement
  : expression SemiColon
- | expression Assign expression SemiColon
  | ifStatement SemiColon
  | forStatement SemiColon
  | whileStatement SemiColon
@@ -60,7 +59,7 @@ idList
  ;
 
 exprList
- : (expression|functionDecl) ((Comma|Colon) (expression|functionDecl))*
+ : expression ((Comma|Colon) expression)*
  | expression Range expression
  ;
 
@@ -68,30 +67,13 @@ expression
  : Minus expression #unaryMinusExpression
  | Not  expression #notExpression
  | Return expression? #returnExpression
- | expression Pow expression#powerExpression
- | expression Star expression #multiplyExpression
- | expression Slash expression #divideExpression
- | expression Modulus expression#modulusExpression
- | expression Plus expression#addExpression
- | expression Minus expression #subtractExpression
- | expression GTEquals expression #gtEqExpression
- | expression LTEquals expression #ltEqExpression
- | expression GT expression #gtExpression
- | expression LT expression #ltExpression
- | expression Equals expression #eqExpression
- | expression NEquals expression #notEqExpression
- | expression And expression #andExpression
- | expression Or expression #orExpression
- | expression ShortHandFunction expression #shorthandFunctionCall
- | expression In expression #inExpression
- | expression ComponentObject expression #componentObjectExpression
- | expression Dot expression #accessMemberExpression
+ | expression (Pow|Star|Slash|Modulus|Plus|Minus|GTEquals|LTEquals|GT|LT|Equals|NEquals|And|Or|In|ComponentObject|Dot|ShortHandFunction|Assign) expression #operationExpression
  | list #listExpression
- | tuple #tupleDeclaration
- | functionDecl #functionDeclaration
- | listEvaluation #newListEvaluation
+ | tuple #tupleDeclarationExpression
+ | functionDecl #functionDeclarationExpression
+ | listEvaluation #newListEvaluationExpression
  | Number #numberExpression
- | Boolean #boolExpression
+ | Boolean #booleanExpression
  | Quote #stringExpression
  | Identifier (OParen exprList? CParen)? indexes? #callExpression
  | '(' expression ')' # parenthesisExpression
@@ -115,53 +97,53 @@ indexes
  ;
 
 Function : 'function';
-Input: 'input';
-Local: 'local';
-If   : 'if';
+Input : 'input';
+Local : 'local';
+If : 'if';
 Then : 'then';
 Elif : 'elif';
 Else : 'else';
-Fi   : 'fi';
-Return   : 'return';
-For  : 'for';
-While: 'while';
-Do   : 'do';
-Od   : 'od';
-End  : 'end';
-In   : 'in';
-Repeat  : 'repeat';
-Until: 'until';
+Fi : 'fi';
+Return : 'return';
+For : 'for';
+While : 'while';
+Do : 'do';
+Od : 'od';
+End : 'end';
+In : 'in';
+Repeat : 'repeat';
+Until : 'until';
 
-Not  : 'not';
-Or   : 'or';
-And  : 'and';
-Equals   : '=';
-NEquals  : '<>';
+Not : 'not';
+Or : 'or';
+And : 'and';
+Equals : '=';
+NEquals : '<>';
 GTEquals : '>=';
 LTEquals : '<=';
-Pow  : '^';
+Pow : '^';
 Excl : '!';
-GT   : '>';
-LT   : '<';
-Plus  : '+';
+GT : '>';
+LT : '<';
+Plus : '+';
 Minus : '-';
 Star : '*';
-Slash   : '/';
-Modulus  : '%';
-OBrace   : '{';
-CBrace   : '}';
+Slash : '/';
+Modulus : '%';
+OBrace : '{';
+CBrace : '}';
 OBracket : '[';
 CBracket : ']';
-OParen   : '(';
-CParen   : ')';
-SemiColon   : ';';
-Assign   : ':=';
-Comma: ',';
+OParen : '(';
+CParen : ')';
+SemiColon : ';';
+Assign : ':=';
+Comma : ',';
 Dot : '.' ;
-QuestionMark: '?';
-Colon: ':';
-ShortHandFunction: '->';
-Range: '..';
+QuestionMark : '?';
+Colon : ':';
+ShortHandFunction : '->';
+Range : '..';
 ComponentObject : '!.' ;
 
 Boolean
@@ -173,10 +155,6 @@ Number
  : Integer ('.' Digit+)?|('.' Digit+)
  ;
 
-Identifier
- : [a-zA-Z0-9_@]+([\\]+[a-zA-Z0-9_@,.() ]+)*|([\\]+[a-zA-Z0-9_@,.() ]+)*[a-zA-Z0-9_@]+
- ;
-
 Quote
  : '"' (ESC|.)*? '"'
  | '\'' (ESC|.)*? '\''
@@ -184,6 +162,10 @@ Quote
 
 TrippleQuote
  : '"""' (ESC|.)*? '"""'
+ ;
+
+Identifier
+ : [a-zA-Z0-9_@]+([\\]+[a-zA-Z0-9_@,.() ]+)*|([\\]+[a-zA-Z0-9_@,.()\ ]+)*[a-zA-Z0-9_@]+
  ;
 
 Comment
