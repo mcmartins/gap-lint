@@ -69,9 +69,10 @@ expression
  | Return expression? #returnExpression
  | expression (Pow|Star|Slash|Modulus|Plus|Minus|GTEquals|LTEquals|GT|LT|Equals|NEquals|And|Or|In|ComponentObject|Dot|ShortHandFunction|Assign) expression #operationExpression
  | list #listExpression
- | tuple #tupleDeclarationExpression
+ | tuple #tupleExpression
  | functionDecl #functionDeclarationExpression
- | listEvaluation #newListEvaluationExpression
+ | listEvaluation #listEvaluationExpression
+ | Comparison #comparisonObjects
  | Number #numberExpression
  | Boolean #booleanExpression
  | Quote #stringExpression
@@ -138,6 +139,7 @@ OParen : '(';
 CParen : ')';
 SemiColon : ';';
 Assign : ':=';
+Comparison : '\\=' | '\\.' | '\\:' | '\\<';
 Comma : ',';
 Dot : '.' ;
 QuestionMark : '?';

@@ -3,3 +3,5 @@
 *.swp
 .idea
 *.iml
+node_modules
+*.log
