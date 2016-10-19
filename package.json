@@ -6,12 +6,12 @@
   "description": "GAP-Lint is a linter tool to detect errors and problems in GAP code.",
   "version": "1.0.0",
   "main": "index.js",
-  "directories": {
-    "test": "tests"
+  "author": "Manuel Martins",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mcmartins/gap-lint/issues"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "homepage": "https://github.com/mcmartins/gap-lint#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mcmartins/gap-lint.git"
@@ -20,10 +20,14 @@
     "gap",
     "grammar"
   ],
-  "author": "Manuel Martins",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mcmartins/gap-lint/issues"
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "npm run gen:grammar && npm run compress",
+    "gen:grammar": "antlr4 -Dlanguage=JavaScript -no-listener gap.g4",
+    "compress": "grunt uglify --force"
   },
-  "homepage": "https://github.com/mcmartins/gap-lint#readme"
+  "devDependencies": {
+    "grunt": "~1.0.x",
+    "grunt-contrib-uglify": "~2.0.x"
+  }
 }
