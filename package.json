@@ -21,13 +21,14 @@
     "grammar"
   ],
   "scripts": {
-    "clean": "rm -rf ./dist",
+    "clean": "rm -rf ./dist && rm -f src/gap.tokens src/gapLexer.js src/gapParser.js src/gapLexer.tokens",
     "build": "npm run gen:grammar && npm run compress",
-    "gen:grammar": "antlr4 -Dlanguage=JavaScript -no-listener gap.g4",
-    "compress": "grunt uglify --force"
+    "gen:grammar": "cd src/ && antlr4 -Dlanguage=JavaScript -no-listener gap.g4",
+    "compress": "grunt uglify replace"
   },
   "devDependencies": {
     "grunt": "~1.0.x",
-    "grunt-contrib-uglify": "~2.0.x"
+    "grunt-contrib-uglify": "~2.0.x",
+    "grunt-text-replace": "~0.4.x"
   }
 }
