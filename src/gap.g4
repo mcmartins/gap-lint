@@ -139,7 +139,7 @@ OParen : '(';
 CParen : ')';
 SemiColon : ';';
 Assign : ':=';
-Comparison : '\\=' | '\\.' | '\\:' | '\\<';
+Comparison : '=' | '.' | ':' | '<';
 Comma : ',';
 Dot : '.' ;
 QuestionMark : '?';
@@ -167,7 +167,7 @@ TrippleQuote
  ;
 
 Identifier
- : [a-zA-Z0-9_@]+([\\]+[a-zA-Z0-9_@,.() ]+)*|([\\]+[a-zA-Z0-9_@,.()\ ]+)*[a-zA-Z0-9_@]+
+ : [a-zA-Z0-9_@]+[\\ ]*[a-zA-Z0-9_@,.()]*
  ;
 
 Comment

@@ -1,4 +1,4 @@
-var antlr4 = require('antlr4/index');
+var antlr4 = require('./antlr4/index');
 
 var errors = [];
 var GAPLintListener = function () {
@@ -17,7 +17,7 @@ GAPLintListener.prototype.syntaxError = function (recognizer, offendingSymbol, l
     type: "error"
   });
 };
-GAPLintListener.prototype.getErrors = function () {
+GAPLintListener.prototype.getErrors = function getErrors() {
   return errors;
 };
 

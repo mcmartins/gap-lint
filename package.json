@@ -22,13 +22,15 @@
   ],
   "scripts": {
     "clean": "rm -rf ./dist && rm -f src/gap.tokens src/gapLexer.js src/gapParser.js src/gapLexer.tokens",
-    "build": "npm run gen:grammar && npm run compress",
-    "gen:grammar": "cd src/ && antlr4 -Dlanguage=JavaScript -no-listener gap.g4",
-    "compress": "grunt uglify replace"
+    "build": "npm run setup:antlr && npm run gen:grammar && npm run dist",
+    "setup:antlr": "[ ! -f antlr-4.7-complete.jar ] && wget http://www.antlr.org/download/antlr-4.7-complete.jar || exit 0",
+    "gen:grammar": "cd src/ && java -cp antlr-4.7-complete.jar:$CLASSPATH org.antlr.v4.Tool -Dlanguage=JavaScript -no-listener gap.g4",
+    "dist": "grunt"
   },
   "devDependencies": {
     "grunt": "~1.0.x",
-    "grunt-contrib-uglify": "~2.0.x",
-    "grunt-text-replace": "~0.4.x"
+    "grunt-contrib-uglify": "~3.0.x",
+    "grunt-text-replace": "~0.4.x",
+    "antlr4": "^4.7.0"
   }
 }
