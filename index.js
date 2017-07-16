@@ -1,7 +1,7 @@
-var antlr4 = require('./antlr4/index');
-var GapLexer = require('./gapLexer').gapLexer;
-var GapParser = require('./gapParser').gapParser;
-var GAPLintListener = require('./gapLintListener').GAPLintListener;
+var antlr4 = require('antlr4/index');
+var GapLexer = require('./src/gapLexer').gapLexer;
+var GapParser = require('./src/gapParser').gapParser;
+var GAPLintListener = require('./src/gapLintListener').GAPLintListener;
 
 var GAPLint = {
   validate: function validate(input) {
@@ -18,9 +18,10 @@ var GAPLint = {
 };
 
 // for the browser
-if (window) {
-  window.GAPLint = GAPLint;
-}
+//if (window) {
+// / console.log(window);
+//  window.GAPLint = GAPLint;
+//}
 
 // for node js
 if (exports) {

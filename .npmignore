@@ -3,7 +3,11 @@
 *.swp
 .idea
 *.iml
-node_modules
 *.log
 *-lock.json
+.c9
+.git
+lib
 *.jar
+.npmignore
+.gitignore
