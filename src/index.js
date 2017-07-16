@@ -3,36 +3,26 @@ var GapLexer = require('./gapLexer').gapLexer;
 var GapParser = require('./gapParser').gapParser;
 var GAPLintListener = require('./gapLintListener').GAPLintListener;
 
+var GAPLint = {
+  validate: function validate(input) {
+    var chars = new antlr4.InputStream(input);
+    var lexer = new GapLexer(chars);
+    var tokens = new antlr4.CommonTokenStream(lexer);
+    var parser = new GapParser(tokens);
+    var listener = new GAPLintListener();
+    parser.removeErrorListeners();
+    parser.addErrorListener(listener);
+    parser.parse();
+    return listener;
+  }
+};
+
 // for the browser
 if (window) {
-  window.GapLint = {
-    validate: function validate(input) {
-      var chars = new antlr4.InputStream(input);
-      var lexer = new GapLexer(chars);
-      var tokens = new antlr4.CommonTokenStream(lexer);
-      var parser = new GapParser(tokens);
-      var listener = new GAPLintListener();
-      parser.removeErrorListeners();
-      parser.addErrorListener(listener);
-      parser.parse();
-      return listener;
-    }
-  };
+  window.GAPLint = GAPLint;
 }
 
 // for node js
 if (exports) {
-  exports.GapLint = {
-    validate: function validate(input) {
-      var chars = new antlr4.InputStream(input);
-      var lexer = new GapLexer(chars);
-      var tokens = new antlr4.CommonTokenStream(lexer);
-      var parser = new GapParser(tokens);
-      var listener = new GAPLintListener();
-      parser.removeErrorListeners();
-      parser.addErrorListener(listener);
-      parser.parse();
-      return listener;
-    }
-  };
+  exports.GAPLint = GAPLint;
 }

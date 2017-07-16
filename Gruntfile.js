@@ -14,6 +14,7 @@ module.exports = function (grunt) {
           'dist/gapLexer.js': ['src/gapLexer.js'],
           'dist/gapLintListener.js': ['src/gapLintListener.js'],
           'dist/index.js': ['src/index.js'],
+          'dist/lib/require.min.js': ['lib/require/require.min.js'],
           'dist/antlr4/atn/ATN.js': ['node_modules/antlr4/atn/ATN.js'],
           'dist/antlr4/atn/ATNConfig.js': ['node_modules/antlr4/atn/ATNConfig.js'],
           'dist/antlr4/atn/ATNConfigSet.js': ['node_modules/antlr4/atn/ATNConfigSet.js'],
@@ -64,9 +65,9 @@ module.exports = function (grunt) {
     replace: {
       relative_path: {
         src: ['src/**.js'],
-        overwrite: true,                 // overwrite matched source files
+        overwrite: true, // overwrite matched source files
         replacements: [{
-          from: 'require("antlr4',
+          from: 'require("antlr4', // this way node will load the files from relative path!
           to: 'require("./antlr4'
         }]
       }
