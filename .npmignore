@@ -2,7 +2,6 @@
 *~
 *.swp
 .idea
-*.iml
 *.log
 *-lock.json
 .c9

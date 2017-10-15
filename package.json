@@ -4,7 +4,7 @@
   ],
   "name": "gap-lint",
   "description": "GAP-Lint is a linter tool to detect errors and problems in GAP code.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "index.js",
   "author": "Manuel Martins",
   "license": "ISC",
@@ -23,8 +23,8 @@
   "scripts": {
     "clean": "rm -rf ./dist && rm -f src/gap.tokens src/gapLexer.js src/gapParser.js src/gapLexer.tokens",
     "build": "npm run setup:antlr && npm run gen:grammar && npm run grunt",
-    "setup:antlr": "[ ! -f antlr-4.7-complete.jar ] && wget http://www.antlr.org/download/antlr-4.7-complete.jar || exit 0",
-    "gen:grammar": "cd src/ && java -cp antlr-4.7-complete.jar:$CLASSPATH org.antlr.v4.Tool -Dlanguage=JavaScript -no-listener gap.g4",
+    "setup:antlr": "[ ! -f src/antlr.jar ] && wget http://www.antlr.org/download/antlr-4.7-complete.jar -O src/antlr.jar || exit 0",
+    "gen:grammar": "cd src/ && java -cp antlr.jar:$CLASSPATH org.antlr.v4.Tool -Dlanguage=JavaScript -no-listener gap.g4",
     "grunt": "grunt"
   },
   "dependencies": {
@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "grunt": "~1.0.x",
-    "grunt-contrib-uglify": "~3.0.x"
+    "grunt-contrib-uglify": "~3.1.x"
   }
 }
