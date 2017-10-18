@@ -55,7 +55,7 @@ repeatStatement
  ;
 
 idList
- : Identifier (Comma Identifier)*
+ : ID (Comma ID)*
  ;
 
 exprList
@@ -76,7 +76,7 @@ expression
  | Number #numberExpression
  | Boolean #booleanExpression
  | Quote #stringExpression
- | Identifier (OParen exprList? CParen)? indexes? #callExpression
+ | ID (OParen exprList? CParen)? indexes? #callExpression
  | '(' expression ')' # parenthesisExpression
  ;
 
@@ -85,12 +85,12 @@ list
  ;
 
 tuple
- : (OParen(Number|Identifier)(Comma(Number|Identifier))*CParen)+
+ : (OParen(Number|ID)(Comma(Number|ID))*CParen)+
  ;
 
 listEvaluation
- : Identifier (OBrace (OBracket exprList CBracket) CBrace)+
- | Identifier (OBrace Identifier OParen (OBracket exprList CBracket) (Comma (OBracket exprList CBracket))* CParen CBrace)+
+ : ID (OBrace (OBracket exprList CBracket) CBrace)+
+ | ID (OBrace ID OParen (OBracket exprList CBracket) (Comma (OBracket exprList CBracket))* CParen CBrace)+
  ;
 
 indexes
@@ -166,8 +166,17 @@ TrippleQuote
  : '"""' (ESC|.)*? '"""'
  ;
 
-Identifier
- : [a-zA-Z0-9_@]+[\\ ]*[a-zA-Z0-9_@,.()]*
+fragment
+DIGIT
+ :  '0'..'9' ;
+
+ID
+ :   (LETTER|DIGIT|'_'|'@'|'\\ ')+LETTER?
+ ;
+
+fragment
+LETTER
+ : [a-zA-Z]
  ;
 
 Comment
