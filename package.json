@@ -4,7 +4,7 @@
   ],
   "name": "gap-lint",
   "description": "GAP-Lint is a linter tool to detect errors and problems in GAP code.",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "index.js",
   "author": "Manuel Martins",
   "license": "ISC",
