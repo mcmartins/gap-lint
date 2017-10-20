@@ -6,12 +6,8 @@ generate parsers.
 
 * [GAP Lint on Codemirror](https://mcmartins.github.io/gap-codemirror)
 
-## How it works
+* Install [Brackets](http://brackets.io/) and install the extension from the [registry](https://registry.brackets.io/)
 
-GAP is a structured language and GAPLint traverses the code line by line looking for code quality compliance violations.
-At the moment GAPLint does not perform static analysis.
+# License
 
-# Development
-
-mklink /j C:\Users\Manue\AppData\Roaming\Brackets\extensions\user\gap C:\Users\Manue\Documents\GitHub\gap-ide
-ln -s GitHub\gap-ide Brackets\extensions\user\gap
+GNU General Public License v2.0
