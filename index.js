@@ -18,10 +18,9 @@ var GAPLint = {
 };
 
 // for the browser
-//if (window) {
-// / console.log(window);
-//  window.GAPLint = GAPLint;
-//}
+if (window) {
+  window.GAPLint = GAPLint;
+}
 
 // for node js
 if (exports) {

@@ -9,17 +9,21 @@ block
  ;
 
 statement
- : expression SemiColon
- | ifStatement SemiColon
- | forStatement SemiColon
- | whileStatement SemiColon
- | doStatement SemiColon
- | repeatStatement SemiColon
+ : expression SemiColon SemiColon?
+ | ifStatement SemiColon SemiColon?
+ | forStatement SemiColon SemiColon?
+ | whileStatement SemiColon SemiColon?
+ | doStatement SemiColon SemiColon?
+ | repeatStatement SemiColon SemiColon?
  | TrippleQuote
  ;
 
 functionDecl
  : Function OParen idList? CParen (statement|Local idList SemiColon)+ End
+ ;
+ 
+shortFunctionDecl
+ : OBrace idList? CBrace ShortHandFunction expression OParen idList? CParen
  ;
 
 doStatement
@@ -67,17 +71,18 @@ expression
  : Minus expression #unaryMinusExpression
  | Not  expression #notExpression
  | Return expression? #returnExpression
- | expression (Pow|Star|Slash|Modulus|Plus|Minus|GTEquals|LTEquals|GT|LT|Equals|NEquals|And|Or|In|ComponentObject|Dot|ShortHandFunction|Assign) expression #operationExpression
+ | expression (Pow|Star|Slash|Modulus|Plus|Minus|GTEquals|LTEquals|GT|LT|Equals|NEquals|And|Or|In|ComponentObject|ShortHandFunction|Assign|Dot) expression #operationExpression
  | list #listExpression
  | tuple #tupleExpression
  | functionDecl #functionDeclarationExpression
+ | shortFunctionDecl #shortFunctionDeclarationExpression
  | listEvaluation #listEvaluationExpression
  | Comparison #comparisonObjects
  | Number #numberExpression
  | Boolean #booleanExpression
  | Quote #stringExpression
  | ID (OParen exprList? CParen)? indexes? #callExpression
- | '(' expression ')' # parenthesisExpression
+ | OParen expression CParen # parenthesisExpression
  ;
 
 list
@@ -171,7 +176,7 @@ DIGIT
  :  '0'..'9' ;
 
 ID
- :   (LETTER|DIGIT|'_'|'@'|'\\ ')+LETTER?
+ :   (LETTER|DIGIT|'_'|'@'|'\\ ')+ Dot? ID?
  ;
 
 fragment

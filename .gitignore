@@ -7,3 +7,9 @@ node_modules
 *.log
 *-lock.json
 *.jar
+dist
+src/*.interp
+src/*.tokens
+src/gapLexer.js
+src/gapParser.js
+
